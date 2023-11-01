@@ -15,7 +15,7 @@ namespace ConsoleSampleIncGen.Generator;
 [Generator]
 public class FieldPrinterGenerator : IIncrementalGenerator
 {
-       public void Initialize(IncrementalGeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Register the syntax provider to select classes with properties
         var classDeclarations = context.SyntaxProvider
@@ -52,6 +52,7 @@ public class FieldPrinterGenerator : IIncrementalGenerator
         var className = classSymbol.Name;
         var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
         var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
+        
 
         var propertyListCode = string.Join(Environment.NewLine, properties.Select(p =>
             $@"            Console.WriteLine(""{p.Name}: "" + (instance.{p.Name}?.ToString() ?? ""none""));"));
@@ -61,12 +62,14 @@ using System;
 
 namespace {namespaceName}
 {{
-    public static partial class {className}Extensions
+    public static class {className}Extensions
     {{
         public static void PrintProperties(this {className} instance)
         {{
             if (instance == null) throw new ArgumentNullException(nameof(instance));
+            string s = string.Empty;
 {propertyListCode}
+            
         }}
     }}
 }}
